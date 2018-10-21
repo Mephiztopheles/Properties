@@ -1,0 +1,28 @@
+{
+  "name": "@mephiztopheles/properties",
+  "version": "1.0.0",
+  "description": "Java properties brought to javascript",
+  "main": "Property.ts",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mephiztopheles/Properties.git"
+  },
+  "keywords": [
+    "properties",
+    "mephiztopheles"
+  ],
+  "author": "xandrios93",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mephiztopheles/Properties/issues"
+  },
+  "homepage": "https://github.com/Mephiztopheles/Properties#readme"
+}
