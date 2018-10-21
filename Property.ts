@@ -1,5 +1,5 @@
-import ChangeListener  from "./ChangeListener.js";
-import Interceptor     from "./Interceptor.js";
+import ChangeListener from "./ChangeListener.js";
+import Interceptor    from "./Interceptor.js";
 
 export default class Property<T> implements ChangeListener<T> {
 

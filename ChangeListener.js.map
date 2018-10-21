@@ -1,0 +1,1 @@
+{"version":3,"file":"ChangeListener.js","sourceRoot":"","sources":["ChangeListener.ts"],"names":[],"mappings":"AAMA,MAAM,OAAO,2BAA2B;IACpC,YAAsB,MAAkE;QAAlE,WAAM,GAAN,MAAM,CAA4D;IACxF,CAAC;IAED,OAAO,CAAE,UAAwB,EAAE,MAAqB;QACpD,IAAI,CAAC,MAAM,CAAE,UAAU,EAAE,MAAM,CAAE,CAAC;IACtC,CAAC;CACJ"}

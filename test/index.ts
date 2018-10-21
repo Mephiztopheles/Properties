@@ -1,6 +1,6 @@
-import StringProperty                                            from "../src/properties/StringProperty.js";
-import NumberProperty                                            from "../src/properties/NumberProperty.js";
-import RegExProperty                                             from "../src/properties/RegExProperty.js";
+import StringProperty                                            from "../properties/StringProperty.js";
+import NumberProperty                                            from "../properties/NumberProperty.js";
+import RegExProperty                                             from "../properties/RegExProperty.js";
 import TestCase, { assertEquals, assertFalse, assertTrue, test } from "../node_modules/@mephiztopheles/test/TestCase.js";
 
 class PropertyTest extends TestCase {
