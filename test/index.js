@@ -8,22 +8,37 @@ import StringProperty from "../properties/StringProperty.js";
 import NumberProperty from "../properties/NumberProperty.js";
 import RegExProperty from "../properties/RegExProperty.js";
 import TestCase, { assertEquals, assertFalse, assertTrue, test } from "../node_modules/@mephiztopheles/test/TestCase.js";
+import BooleanProperty from "../properties/BooleanProperty.js";
+class TestListener {
+    constructor(newValue, oldValue) {
+        this.newValue = newValue;
+        this.oldValue = oldValue;
+    }
+    changed(observable, newValue, oldValue) {
+        assertEquals(oldValue, this.oldValue);
+        assertEquals(newValue, this.newValue);
+    }
+}
 class PropertyTest extends TestCase {
     testString() {
         let property = new StringProperty("lol");
         let changed = new StringProperty();
         changed.bind(property);
         assertEquals("lol", changed.value);
-        let left = new StringProperty("Wirklich? ");
+        let left = new StringProperty("");
         let concat = left.concat(changed);
-        left.value = "Hallo ";
-        changed.value = "Markus";
-        assertEquals("Hallo Markus", concat.value);
+        left.value = "Hello ";
+        changed.value = "Concat";
+        assertEquals("Hello Concat", concat.value);
         let regex = new RegExProperty(/l/);
         let matching = property.matches(regex);
         assertTrue(matching.value);
         regex.value = /a/;
         assertFalse(matching.value);
+        let stringProperty = new StringProperty("A");
+        let listener = new TestListener("B", "A");
+        stringProperty.addListener(listener);
+        stringProperty.value = "B";
     }
     testNumber() {
         let number = new NumberProperty(200);
@@ -61,6 +76,10 @@ class PropertyTest extends TestCase {
         assertTrue(lt.value);
         let or = gt.or(lt);
         assertTrue(or.value);
+        let booleanProperty = new BooleanProperty(true);
+        let listener = new TestListener(false, true);
+        booleanProperty.addListener(listener);
+        booleanProperty.value = false;
     }
 }
 __decorate([

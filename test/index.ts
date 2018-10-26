@@ -2,6 +2,23 @@ import StringProperty                                            from "../proper
 import NumberProperty                                            from "../properties/NumberProperty.js";
 import RegExProperty                                             from "../properties/RegExProperty.js";
 import TestCase, { assertEquals, assertFalse, assertTrue, test } from "../node_modules/@mephiztopheles/test/TestCase.js";
+import ChangeListener                                            from "../ChangeListener.js";
+import Property                                                  from "../Property.js";
+import BooleanProperty                                           from "../properties/BooleanProperty.js";
+
+
+class TestListener implements ChangeListener<any> {
+
+    constructor( private newValue:any, private oldValue:any ) {
+    }
+
+    changed( observable:Property<any>, newValue:any, oldValue:any ):void {
+
+        assertEquals( oldValue, this.oldValue );
+        assertEquals( newValue, this.newValue );
+    }
+
+}
 
 class PropertyTest extends TestCase {
 
@@ -15,12 +32,12 @@ class PropertyTest extends TestCase {
         changed.bind( property );
         assertEquals( "lol", changed.value );
 
-        let left = new StringProperty( "Wirklich? " );
+        let left = new StringProperty( "" );
         let concat = left.concat( changed );
 
-        left.value = "Hallo ";
-        changed.value = "Markus";
-        assertEquals( "Hallo Markus", concat.value );
+        left.value = "Hello ";
+        changed.value = "Concat";
+        assertEquals( "Hello Concat", concat.value );
 
 
         let regex = new RegExProperty( /l/ );
@@ -29,6 +46,12 @@ class PropertyTest extends TestCase {
         assertTrue( matching.value );
         regex.value = /a/;
         assertFalse( matching.value );
+
+        let stringProperty = new StringProperty( "A" );
+
+        let listener = new TestListener( "B", "A" );
+        stringProperty.addListener( listener );
+        stringProperty.value = "B";
     }
 
     @test
@@ -81,6 +104,11 @@ class PropertyTest extends TestCase {
         let or = gt.or( lt );
         assertTrue( or.value );
 
+        let booleanProperty = new BooleanProperty( true );
+
+        let listener = new TestListener( false, true );
+        booleanProperty.addListener( listener );
+        booleanProperty.value = false;
     }
 }
 

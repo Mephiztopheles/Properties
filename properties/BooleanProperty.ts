@@ -4,6 +4,17 @@ import ChangeListener from "../ChangeListener.js";
 
 export default class BooleanProperty extends Property<boolean> {
 
+    static toBoolean( assignment:Property<any>, interceptor:Interceptor<boolean>, property:Property<any> ) {
+
+        const instance = new BooleanProperty( null, interceptor );
+
+        let toBooleanListener = new ToBooleanListener( <BooleanProperty>instance );
+        assignment.addListener( toBooleanListener );
+        property.addListener( toBooleanListener );
+
+        return instance;
+    }
+
     public and( property:BooleanProperty ) {
         return this.intercept( new AndInterceptor( property ), property );
     }
@@ -14,17 +25,6 @@ export default class BooleanProperty extends Property<boolean> {
 
     public not() {
         return this.intercept( new NotInterceptor( this ), this );
-    }
-
-    static toBoolean( assignment:Property<any>, interceptor:Interceptor<boolean>, property:Property<any> ) {
-
-        const instance = new BooleanProperty( null, interceptor );
-
-        let toBooleanListener = new ToBooleanListener( <BooleanProperty>instance );
-        assignment.addListener( toBooleanListener );
-        property.addListener( toBooleanListener );
-
-        return instance;
     }
 }
 
@@ -65,13 +65,13 @@ class ToBooleanListener implements ChangeListener<any> {
         this.value = instance.value;
     }
 
-    changed( observable:Property<any>, source?:Property<any> ) {
+    changed( observable:Property<any>, newValue:any, oldValue:any ) {
 
         let value = this.instance.value;
-        if ( this.value != value ) {
+        if ( this.value !== value ) {
 
             this.value = value;
-            this.instance.notify( source );
+            this.instance.notify( newValue, oldValue );
         }
     }
 }

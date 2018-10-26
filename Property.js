@@ -11,8 +11,9 @@ export default class Property {
     }
     set value(value) {
         if (this.$value != value) {
+            const oldValue = this.$value;
             this.$value = value;
-            this.notify();
+            this.notify(value, oldValue);
         }
     }
     get isBound() {
@@ -38,9 +39,9 @@ export default class Property {
     changed(observable) {
         this.value = observable.value;
     }
-    notify(source = this) {
+    notify(newValue, oldValue) {
         this.listener.forEach(listener => {
-            listener.changed(this, source);
+            listener.changed(this, newValue, oldValue);
         });
     }
     intercept(interceptor, property) {
@@ -54,8 +55,8 @@ export class NotifyListener {
     constructor(property) {
         this.property = property;
     }
-    changed(observable) {
-        this.property.notify(observable);
+    changed(observable, newValue, oldValue) {
+        this.property.notify(newValue, oldValue);
     }
 }
 //# sourceMappingURL=Property.js.map

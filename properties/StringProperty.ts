@@ -24,6 +24,6 @@ class ConcatenationInterceptor extends Interceptor<string> {
 class MatchesInterceptor extends ToBooleanInterceptor<string> {
 
     intercept( value:boolean ):boolean {
-        return this.propertyToCheck.value.match( this.property.value  ) != null;
+        return this.propertyToCheck.value.match( this.property.value ) != null;
     }
 }

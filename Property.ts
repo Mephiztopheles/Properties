@@ -26,8 +26,10 @@ export default class Property<T> implements ChangeListener<T> {
 
         if ( this.$value != value ) {
 
+            const oldValue = this.$value;
             this.$value = value;
-            this.notify();
+
+            this.notify( value, oldValue );
         }
     }
 
@@ -63,10 +65,10 @@ export default class Property<T> implements ChangeListener<T> {
         this.value = observable.value;
     }
 
-    notify( source:Property<any> = this ) {
+    notify( newValue:T, oldValue:T ) {
 
         this.listener.forEach( listener => {
-            listener.changed( this, source );
+            listener.changed( this, newValue, oldValue );
         } );
     }
 
@@ -87,7 +89,7 @@ export class NotifyListener<T> implements ChangeListener<T> {
     constructor( private property:Property<T> ) {
     }
 
-    changed( observable:Property<T> ) {
-        this.property.notify( observable );
+    changed( observable:Property<T>, newValue:T, oldValue:T ) {
+        this.property.notify( newValue, oldValue );
     }
 }

@@ -1,6 +1,13 @@
 import Property from "../Property.js";
 import Interceptor from "../Interceptor.js";
 export default class BooleanProperty extends Property {
+    static toBoolean(assignment, interceptor, property) {
+        const instance = new BooleanProperty(null, interceptor);
+        let toBooleanListener = new ToBooleanListener(instance);
+        assignment.addListener(toBooleanListener);
+        property.addListener(toBooleanListener);
+        return instance;
+    }
     and(property) {
         return this.intercept(new AndInterceptor(property), property);
     }
@@ -9,13 +16,6 @@ export default class BooleanProperty extends Property {
     }
     not() {
         return this.intercept(new NotInterceptor(this), this);
-    }
-    static toBoolean(assignment, interceptor, property) {
-        const instance = new BooleanProperty(null, interceptor);
-        let toBooleanListener = new ToBooleanListener(instance);
-        assignment.addListener(toBooleanListener);
-        property.addListener(toBooleanListener);
-        return instance;
     }
 }
 export class ToBooleanInterceptor extends Interceptor {
@@ -45,11 +45,11 @@ class ToBooleanListener {
         this.instance = instance;
         this.value = instance.value;
     }
-    changed(observable, source) {
+    changed(observable, newValue, oldValue) {
         let value = this.instance.value;
-        if (this.value != value) {
+        if (this.value !== value) {
             this.value = value;
-            this.instance.notify(source);
+            this.instance.notify(newValue, oldValue);
         }
     }
 }
