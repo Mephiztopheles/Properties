@@ -25,6 +25,8 @@ export default class Property {
         this.bound.addListener(this);
     }
     unbind() {
+        if (!this.isBound)
+            return;
         this.bound.removeListener(this);
         this.bound = null;
     }
@@ -41,7 +43,10 @@ export default class Property {
     }
     notify(newValue, oldValue) {
         this.listener.forEach(listener => {
-            listener.changed(this, newValue, oldValue);
+            if (typeof listener === "function")
+                listener(this, newValue, oldValue);
+            if (listener.hasOwnProperty("changed"))
+                listener.changed(this, newValue, oldValue);
         });
     }
     intercept(interceptor, property) {

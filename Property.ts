@@ -1,10 +1,14 @@
 import ChangeListener from "./ChangeListener.js";
 import Interceptor    from "./Interceptor.js";
 
+interface ChangeListenerLambda<T> {
+    ( observable:Property<T>, newValue:T, oldValue:T ):void
+}
+
 export default class Property<T> implements ChangeListener<T> {
 
     protected bound:Property<T>;
-    protected listener:Array<ChangeListener<T>> = [];
+    protected listener:Array<ChangeListener<T> | ChangeListenerLambda<T>> = [];
     protected $value:T;
     protected interceptor:Interceptor<T>;
 
@@ -46,15 +50,18 @@ export default class Property<T> implements ChangeListener<T> {
 
     public unbind() {
 
+        if ( !this.isBound )
+            return;
+
         this.bound.removeListener( this );
         this.bound = null;
     }
 
-    public addListener( listener:ChangeListener<T> ) {
+    public addListener( listener:ChangeListener<T> | ChangeListenerLambda<T> ) {
         this.listener.push( listener );
     }
 
-    public removeListener( listener:ChangeListener<T> ) {
+    public removeListener( listener:ChangeListener<T> | ChangeListenerLambda<T> ) {
 
         let index = this.listener.indexOf( listener );
         if ( ~index )
@@ -68,7 +75,12 @@ export default class Property<T> implements ChangeListener<T> {
     notify( newValue:T, oldValue:T ) {
 
         this.listener.forEach( listener => {
-            listener.changed( this, newValue, oldValue );
+
+            if ( typeof listener === "function" )
+                listener( this, newValue, oldValue );
+
+            if ( listener.hasOwnProperty( "changed" ) )
+                ( <ChangeListener<T>>listener ).changed( this, newValue, oldValue );
         } );
     }
 
