@@ -78,8 +78,7 @@ export default class Property<T> implements ChangeListener<T> {
 
             if ( typeof listener === "function" )
                 listener( this, newValue, oldValue );
-
-            if ( listener.hasOwnProperty( "changed" ) )
+            else
                 ( <ChangeListener<T>>listener ).changed( this, newValue, oldValue );
         } );
     }

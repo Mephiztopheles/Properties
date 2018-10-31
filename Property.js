@@ -45,7 +45,7 @@ export default class Property {
         this.listener.forEach(listener => {
             if (typeof listener === "function")
                 listener(this, newValue, oldValue);
-            if (listener.hasOwnProperty("changed"))
+            else
                 listener.changed(this, newValue, oldValue);
         });
     }
