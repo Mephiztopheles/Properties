@@ -5,7 +5,8 @@ export default class BooleanProperty extends Property {
         const instance = new BooleanProperty(null, interceptor);
         let toBooleanListener = new ToBooleanListener(instance);
         assignment.addListener(toBooleanListener);
-        property.addListener(toBooleanListener);
+        if (property != null)
+            property.addListener(toBooleanListener);
         return instance;
     }
     and(property) {

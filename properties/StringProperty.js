@@ -8,6 +8,12 @@ export default class StringProperty extends Property {
     matches(property) {
         return BooleanProperty.toBoolean(this, new MatchesInterceptor(this, property), property);
     }
+    isEmpty() {
+        return BooleanProperty.toBoolean(this, new IsEmptyInterceptor(this, this), null);
+    }
+    isNotEmpty() {
+        return this.isEmpty().not();
+    }
 }
 class ConcatenationInterceptor extends Interceptor {
     intercept(value) {
@@ -17,6 +23,11 @@ class ConcatenationInterceptor extends Interceptor {
 class MatchesInterceptor extends ToBooleanInterceptor {
     intercept(value) {
         return this.propertyToCheck.value.match(this.property.value) != null;
+    }
+}
+class IsEmptyInterceptor extends ToBooleanInterceptor {
+    intercept(value) {
+        return this.propertyToCheck.value == null || this.propertyToCheck.value == "";
     }
 }
 //# sourceMappingURL=StringProperty.js.map

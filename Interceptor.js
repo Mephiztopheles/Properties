@@ -3,7 +3,7 @@ export default class Interceptor {
     constructor(property) {
         this.property = property;
         if (this.property == null)
-            throw new Error("Cannot divide with null");
+            throw new Error("Cannot intercept with null");
     }
 }
 //# sourceMappingURL=Interceptor.js.map
