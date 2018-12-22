@@ -1,7 +1,9 @@
+let id = 0;
 export default class Property {
     constructor(value, interceptor) {
+        this.id = id++;
         this.listener = [];
-        this.value = value;
+        this.$value = value;
         this.interceptor = interceptor;
     }
     get value() {
@@ -20,6 +22,8 @@ export default class Property {
         return this.bound != null;
     }
     bind(property) {
+        if (this === property)
+            return;
         this.bound = property;
         this.value = this.bound.value;
         this.bound.addListener(this);

@@ -1,9 +1,44 @@
-import Property from "../Property.js";
+import Property    from "../Property.js";
+import Interceptor from "Interceptor.js";
 
 export default class ArrayProperty<T> extends Property<T[]> {
 
+    constructor ( value?: T[], interceptor?: Interceptor<T> ) {
+
+        if ( !Array.isArray( value ) )
+            value = [];
+
+        super( value, interceptor );
+    }
+
     get ( index: number ): T | undefined {
         return this.$value[ index ];
+    }
+
+    public get value (): T[] {
+
+        if ( this.interceptor == null )
+            return this.$value;
+
+        return this.interceptor.intercept( this.$value );
+    }
+
+    public get length () {
+        return this.$value.length;
+    }
+
+    public set value ( value: T[] ) {
+
+        if ( value == null )
+            value = [];
+
+        if ( this.$value.toString() != value.toString() ) {
+
+            const oldValue = this.$value.slice();
+            this.$value    = value;
+
+            this.notify( value, oldValue );
+        }
     }
 
     push ( ...items: T[] ): number {
