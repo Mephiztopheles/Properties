@@ -1,6 +1,29 @@
 import Property    from "../Property.js";
 import Interceptor from "Interceptor.js";
 
+
+function toJSON ( object ) {
+
+    const cache = [];
+    return JSON.stringify( object, function ( key, value ) {
+        if ( typeof value === 'object' && value !== null ) {
+            if ( cache.indexOf( value ) !== -1 ) {
+                // Duplicate reference found
+                try {
+                    // If this value does not reference a parent it can be deduped
+                    return JSON.parse( JSON.stringify( value ) );
+                } catch ( error ) {
+                    // discard key if value cannot be deduped
+                    return;
+                }
+            }
+            // Store value in our collection
+            cache.push( value );
+        }
+        return value;
+    } );
+}
+
 export default class ArrayProperty<T> extends Property<T[]> {
 
     constructor ( value?: T[], interceptor?: Interceptor<T> ) {
@@ -32,10 +55,10 @@ export default class ArrayProperty<T> extends Property<T[]> {
         if ( value == null )
             value = [];
 
-        if ( this.$value.toString() != value.toString() ) {
+        if ( toJSON( this.$value ) != toJSON( value ) ) {
 
             const oldValue = this.$value.slice();
-            this.$value    = value;
+            this.$value    = value.slice();
 
             this.notify( value, oldValue );
         }
@@ -50,7 +73,6 @@ export default class ArrayProperty<T> extends Property<T[]> {
 
         let length = this.$value.push.apply( this.$value, items );
         this.notify( this.$value, oldValue );
-
         return length;
     }
 
@@ -71,7 +93,10 @@ export default class ArrayProperty<T> extends Property<T[]> {
 
     sort ( compareFn?: ( a: T, b: T ) => number ): this {
 
+        const oldValue = this.$value.slice();
         this.$value.sort( compareFn );
+        if ( this.$value.length != oldValue.length )
+            this.notify( this.$value, oldValue );
         return this;
     }
 
