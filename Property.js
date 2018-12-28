@@ -1,8 +1,10 @@
 let id = 0;
+const bindings = new WeakMap();
+const listeners = new WeakMap();
 export default class Property {
     constructor(value, interceptor) {
         this.id = id++;
-        this.listener = [];
+        listeners.set(this, []);
         this.$value = value;
         this.interceptor = interceptor;
     }
@@ -18,35 +20,41 @@ export default class Property {
             this.notify(value, oldValue);
         }
     }
+    toString() {
+        const value = this.value;
+        return value == null ? value : value.toString();
+    }
     get isBound() {
-        return this.bound != null;
+        return bindings.get(this) != null;
     }
     bind(property) {
         if (this === property)
             return;
-        this.bound = property;
-        this.value = this.bound.value;
-        this.bound.addListener(this);
+        this.unbind();
+        bindings.set(this, property);
+        this.value = property.value;
+        property.addListener(this);
     }
     unbind() {
         if (!this.isBound)
             return;
-        this.bound.removeListener(this);
-        this.bound = null;
+        bindings.get(this).removeListener(this);
+        bindings.delete(this);
     }
     addListener(listener) {
-        this.listener.push(listener);
+        listeners.get(this).push(listener);
     }
     removeListener(listener) {
-        let index = this.listener.indexOf(listener);
+        let l = listeners.get(this);
+        let index = l.indexOf(listener);
         if (~index)
-            this.listener.splice(index, 1);
+            l.splice(index, 1);
     }
     changed(observable) {
         this.value = observable.value;
     }
     notify(newValue, oldValue) {
-        this.listener.forEach(listener => {
+        listeners.get(this).forEach(listener => {
             if (typeof listener === "function")
                 listener(this, newValue, oldValue);
             else

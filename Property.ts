@@ -5,18 +5,19 @@ interface ChangeListenerLambda<T> {
     ( observable: Property<T>, newValue: T, oldValue: T ): void
 }
 
-let id = 0;
+let id          = 0;
+const bindings  = new WeakMap();
+const listeners = new WeakMap();
 
 export default class Property<T> implements ChangeListener<T> {
 
-    protected id: number                                                   = id++;
-    protected bound: Property<T>;
-    protected listener: Array<ChangeListener<T> | ChangeListenerLambda<T>> = [];
+    protected id: number = id++;
     protected $value: T;
     protected interceptor: Interceptor<T>;
 
     constructor ( value?: T, interceptor?: Interceptor<T> ) {
 
+        listeners.set( this, [] );
         this.$value      = value;
         this.interceptor = interceptor;
     }
@@ -40,8 +41,14 @@ export default class Property<T> implements ChangeListener<T> {
         }
     }
 
+    public toString () {
+
+        const value = this.value;
+        return value == null ? value : value.toString();
+    }
+
     public get isBound (): boolean {
-        return this.bound != null;
+        return bindings.get( this ) != null;
     }
 
     public bind ( property: Property<T> ) {
@@ -49,9 +56,11 @@ export default class Property<T> implements ChangeListener<T> {
         if ( this === property )
             return;
 
-        this.bound = property;
-        this.value = this.bound.value;
-        this.bound.addListener( this );
+        this.unbind();
+
+        bindings.set( this, property );
+        this.value = property.value;
+        property.addListener( this );
     }
 
     public unbind () {
@@ -59,19 +68,20 @@ export default class Property<T> implements ChangeListener<T> {
         if ( !this.isBound )
             return;
 
-        this.bound.removeListener( this );
-        this.bound = null;
+        bindings.get( this ).removeListener( this );
+        bindings.delete( this );
     }
 
     public addListener ( listener: ChangeListener<T> | ChangeListenerLambda<T> ) {
-        this.listener.push( listener );
+        listeners.get( this ).push( listener );
     }
 
     public removeListener ( listener: ChangeListener<T> | ChangeListenerLambda<T> ) {
 
-        let index = this.listener.indexOf( listener );
+        let l     = listeners.get( this );
+        let index = l.indexOf( listener );
         if ( ~index )
-            this.listener.splice( index, 1 );
+            l.splice( index, 1 );
     }
 
     changed ( observable: Property<T> ) {
@@ -80,7 +90,7 @@ export default class Property<T> implements ChangeListener<T> {
 
     notify ( newValue: T, oldValue: T ) {
 
-        this.listener.forEach( listener => {
+        listeners.get( this ).forEach( listener => {
 
             if ( typeof listener === "function" )
                 listener( this, newValue, oldValue );
@@ -89,9 +99,9 @@ export default class Property<T> implements ChangeListener<T> {
         } );
     }
 
-    protected intercept ( interceptor: Interceptor<T>, property: Property<T> ) {
+    protected intercept<R extends Property<T>> ( interceptor: Interceptor<T>, property: Property<T> ): R {
 
-        const instance: Property<T> = new ( <any>this.constructor )( this.$value, interceptor );
+        const instance: ( R ) = new ( <any>this.constructor )( this.$value, interceptor );
 
         instance.bind( this );
 
