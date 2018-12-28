@@ -5,19 +5,19 @@ import RegExProperty                             from "./RegExProperty.js";
 
 export default class StringProperty extends Property<string> {
 
-    public concat ( suffix: StringProperty ) {
+    public concat ( suffix: StringProperty ): StringProperty {
         return this.intercept( new ConcatenationInterceptor( suffix ), suffix );
     }
 
-    public matches ( property: RegExProperty ) {
+    public matches ( property: RegExProperty ):BooleanProperty {
         return BooleanProperty.toBoolean( this, new MatchesInterceptor( this, property ), property );
     }
 
-    public isEmpty () {
+    public isEmpty (): BooleanProperty {
         return BooleanProperty.toBoolean( this, new IsEmptyInterceptor( this, this ), null );
     }
 
-    public isNotEmpty () {
+    public isNotEmpty (): BooleanProperty {
         return this.isEmpty().not();
     }
 }

@@ -46,7 +46,7 @@ export default class ArrayProperty<T> extends Property<T[]> {
         return this.interceptor.intercept( this.$value );
     }
 
-    public get length () {
+    public get length ():number {
         return this.$value.length;
     }
 

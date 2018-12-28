@@ -5,19 +5,19 @@ import BooleanProperty, { ToBooleanInterceptor } from "./BooleanProperty.js";
 
 export default class NumberProperty extends Property<number> {
 
-    public divide( property:NumberProperty ) {
+    public divide( property:NumberProperty ):NumberProperty {
         return this.intercept( new DivideInterceptor( property ), property );
     }
 
-    public subtract( property:NumberProperty ) {
+    public subtract( property:NumberProperty ):NumberProperty {
         return this.intercept( new SubtractInterceptor( property ), property );
     }
 
-    public add( property:NumberProperty ) {
+    public add( property:NumberProperty ):NumberProperty {
         return this.intercept( new AddInterceptor( property ), property );
     }
 
-    public multiply( property:NumberProperty ) {
+    public multiply( property:NumberProperty ):NumberProperty {
         return this.intercept( new MultiplyInterceptor( property ), property );
     }
 

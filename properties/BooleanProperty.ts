@@ -4,7 +4,7 @@ import ChangeListener from "../ChangeListener.js";
 
 export default class BooleanProperty extends Property<boolean> {
 
-    static toBoolean ( assignment: Property<any>, interceptor: Interceptor<boolean>, property: Property<any> ) {
+    static toBoolean ( assignment: Property<any>, interceptor: Interceptor<boolean>, property: Property<any> ):BooleanProperty {
 
         const instance = new BooleanProperty( null, interceptor );
 
@@ -16,15 +16,15 @@ export default class BooleanProperty extends Property<boolean> {
         return instance;
     }
 
-    public and ( property: BooleanProperty ) {
+    public and ( property: BooleanProperty ): BooleanProperty {
         return this.intercept( new AndInterceptor( property ), property );
     }
 
-    public or ( property: BooleanProperty ) {
+    public or ( property: BooleanProperty ): BooleanProperty {
         return this.intercept( new OrInterceptor( property ), property );
     }
 
-    public not () {
+    public not (): BooleanProperty {
         return this.intercept( new NotInterceptor( this ), this );
     }
 }

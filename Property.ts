@@ -41,17 +41,17 @@ export default class Property<T> implements ChangeListener<T> {
         }
     }
 
-    public toString () {
+    public toString (): string {
 
         const value = this.value;
-        return value == null ? value : value.toString();
+        return value == null ? "null" : value.toString();
     }
 
     public get isBound (): boolean {
         return bindings.get( this ) != null;
     }
 
-    public bind ( property: Property<T> ) {
+    public bind ( property: Property<T> ): void {
 
         if ( this === property )
             return;
@@ -63,7 +63,7 @@ export default class Property<T> implements ChangeListener<T> {
         property.addListener( this );
     }
 
-    public unbind () {
+    public unbind (): void {
 
         if ( !this.isBound )
             return;
@@ -72,11 +72,11 @@ export default class Property<T> implements ChangeListener<T> {
         bindings.delete( this );
     }
 
-    public addListener ( listener: ChangeListener<T> | ChangeListenerLambda<T> ) {
+    public addListener ( listener: ChangeListener<T> | ChangeListenerLambda<T> ): void {
         listeners.get( this ).push( listener );
     }
 
-    public removeListener ( listener: ChangeListener<T> | ChangeListenerLambda<T> ) {
+    public removeListener ( listener: ChangeListener<T> | ChangeListenerLambda<T> ): void {
 
         let l     = listeners.get( this );
         let index = l.indexOf( listener );

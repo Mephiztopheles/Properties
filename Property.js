@@ -22,7 +22,7 @@ export default class Property {
     }
     toString() {
         const value = this.value;
-        return value == null ? value : value.toString();
+        return value == null ? "null" : value.toString();
     }
     get isBound() {
         return bindings.get(this) != null;

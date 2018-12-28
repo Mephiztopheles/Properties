@@ -9,8 +9,8 @@ export default class RegExProperty extends Property<RegExp> {
     public set value( value:any ) {
 
         if ( value instanceof RegExp )
-            this.$value = value;
+            super.value = value;
         else
-            this.$value = new RegExp( value );
+            super.value = new RegExp( value );
     }
 }
