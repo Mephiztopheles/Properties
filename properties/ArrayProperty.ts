@@ -26,7 +26,7 @@ function toJSON ( object ) {
 
 export default class ArrayProperty<T> extends Property<T[]> {
 
-    constructor ( value?: T[], interceptor?: Interceptor<T> ) {
+    public constructor ( value?: T[], interceptor?: Interceptor<T> ) {
 
         if ( !Array.isArray( value ) )
             value = [];
@@ -34,7 +34,7 @@ export default class ArrayProperty<T> extends Property<T[]> {
         super( value, interceptor );
     }
 
-    get ( index: number ): T | undefined {
+    public get ( index: number ): T | undefined {
         return this.$value[ index ];
     }
 
@@ -46,7 +46,7 @@ export default class ArrayProperty<T> extends Property<T[]> {
         return this.interceptor.intercept( this.$value );
     }
 
-    public get length ():number {
+    public get length (): number {
         return this.$value.length;
     }
 
@@ -64,7 +64,7 @@ export default class ArrayProperty<T> extends Property<T[]> {
         }
     }
 
-    push ( ...items: T[] ): number {
+    public push ( ...items: T[] ): number {
 
         if ( items.length == 0 )
             return this.$value.length;
@@ -76,7 +76,7 @@ export default class ArrayProperty<T> extends Property<T[]> {
         return length;
     }
 
-    splice ( start: number, deleteCount?: number, ...items: T[] ): T[] {
+    public splice ( start: number, deleteCount?: number, ...items: T[] ): T[] {
 
         const oldValue = this.$value.slice();
         let deleted    = this.$value.splice.apply( this.$value, arguments );
@@ -87,11 +87,11 @@ export default class ArrayProperty<T> extends Property<T[]> {
         return deleted;
     }
 
-    slice ( start?: number, end?: number ): T[] {
+    public slice ( start?: number, end?: number ): T[] {
         return this.$value.slice( start, end );
     }
 
-    sort ( compareFn?: ( a: T, b: T ) => number ): this {
+    public sort ( compareFn?: ( a: T, b: T ) => number ): this {
 
         const oldValue = this.$value.slice();
         this.$value.sort( compareFn );
@@ -100,15 +100,28 @@ export default class ArrayProperty<T> extends Property<T[]> {
         return this;
     }
 
-    indexOf ( searchElement: T, fromIndex?: number ): number {
+    public indexOf ( searchElement: T, fromIndex?: number ): number {
         return this.$value.indexOf( searchElement, fromIndex );
     }
 
-    forEach ( callbackfn: ( value: T, index: number, array: T[] ) => void, thisArg?: any ): void {
+    public forEach ( callbackfn: ( value: T, index: number, array: T[] ) => void, thisArg?: any ): void {
         this.$value.forEach( callbackfn, thisArg );
     }
 
-    pop (): T | undefined {
+    public filter ( callback: ( value: T, index: number, array: T[] ) => any, thisArg?: any ): T[] {
+        return this.$value.filter( callback, thisArg );
+    }
+
+    public find ( callback: ( value: T, index: number, array: T[] ) => boolean, thisArg?: any ): T {
+
+        for ( let index = 0; index < this.$value.length; index++ )
+            if ( callback.call( thisArg, this.$value[ index ], index, this.$value ) )
+                return this.$value[ index ];
+
+        return null;
+    }
+
+    public pop (): T | undefined {
 
         const oldValue = this.$value.slice();
         let element    = this.$value.pop();

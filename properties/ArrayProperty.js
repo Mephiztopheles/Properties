@@ -77,6 +77,15 @@ export default class ArrayProperty extends Property {
     forEach(callbackfn, thisArg) {
         this.$value.forEach(callbackfn, thisArg);
     }
+    filter(callback, thisArg) {
+        return this.$value.filter(callback, thisArg);
+    }
+    find(callback, thisArg) {
+        for (let index = 0; index < this.$value.length; index++)
+            if (callback.call(thisArg, this.$value[index], index, this.$value))
+                return this.$value[index];
+        return null;
+    }
     pop() {
         const oldValue = this.$value.slice();
         let element = this.$value.pop();
