@@ -26,16 +26,8 @@ export default class ArrayProperty extends Property {
             value = [];
         super(value, interceptor);
     }
-    get(index) {
-        return this.$value[index];
-    }
     get value() {
-        if (this.interceptor == null)
-            return this.$value;
-        return this.interceptor.intercept(this.$value);
-    }
-    get length() {
-        return this.$value.length;
+        return this.$get();
     }
     set value(value) {
         if (value == null)
@@ -45,6 +37,12 @@ export default class ArrayProperty extends Property {
             this.$value = value.slice();
             this.notify(value, oldValue);
         }
+    }
+    get length() {
+        return this.$value.length;
+    }
+    get(index) {
+        return this.$value[index];
     }
     push(...items) {
         if (items.length == 0)

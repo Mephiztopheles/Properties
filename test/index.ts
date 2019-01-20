@@ -1,10 +1,10 @@
-import StringProperty                                            from "../properties/StringProperty.js";
+import ReadOnlyStringProperty                                    from "../properties/StringProperty.js";
 import NumberProperty                                            from "../properties/NumberProperty.js";
 import RegExProperty                                             from "../properties/RegExProperty.js";
 import TestCase, { assertEquals, assertFalse, assertTrue, test } from "../node_modules/@mephiztopheles/test/TestCase.js";
 import ChangeListener                                            from "../ChangeListener.js";
 import Property                                                  from "../Property.js";
-import BooleanProperty                                           from "../properties/BooleanProperty.js";
+import ReadOnlyBooleanProperty                                   from "../properties/BooleanProperty.js";
 
 
 class TestListener implements ChangeListener<any> {
@@ -25,14 +25,14 @@ class PropertyTest extends TestCase {
     @test
     testString() {
 
-        let property = new StringProperty( "lol" );
+        let property = new ReadOnlyStringProperty( "lol" );
 
-        let changed = new StringProperty();
+        let changed = new ReadOnlyStringProperty();
 
         changed.bind( property );
         assertEquals( "lol", changed.value );
 
-        let left = new StringProperty( "" );
+        let left = new ReadOnlyStringProperty( "" );
         let concat = left.concat( changed );
 
         left.value = "Hello ";
@@ -47,7 +47,7 @@ class PropertyTest extends TestCase {
         regex.value = /a/;
         assertFalse( matching.value );
 
-        let stringProperty = new StringProperty( "A" );
+        let stringProperty = new ReadOnlyStringProperty( "A" );
 
         let listener = new TestListener( "B", "A" );
         stringProperty.addListener( listener );
@@ -104,7 +104,7 @@ class PropertyTest extends TestCase {
         let or = gt.or( lt );
         assertTrue( or.value );
 
-        let booleanProperty = new BooleanProperty( true );
+        let booleanProperty = new ReadOnlyBooleanProperty( true );
 
         let listener = new TestListener( false, true );
         booleanProperty.addListener( listener );

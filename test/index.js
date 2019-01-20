@@ -4,11 +4,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import StringProperty from "../properties/StringProperty.js";
+import ReadOnlyStringProperty from "../properties/StringProperty.js";
 import NumberProperty from "../properties/NumberProperty.js";
 import RegExProperty from "../properties/RegExProperty.js";
 import TestCase, { assertEquals, assertFalse, assertTrue, test } from "../node_modules/@mephiztopheles/test/TestCase.js";
-import BooleanProperty from "../properties/BooleanProperty.js";
+import ReadOnlyBooleanProperty from "../properties/BooleanProperty.js";
 class TestListener {
     constructor(newValue, oldValue) {
         this.newValue = newValue;
@@ -21,11 +21,11 @@ class TestListener {
 }
 class PropertyTest extends TestCase {
     testString() {
-        let property = new StringProperty("lol");
-        let changed = new StringProperty();
+        let property = new ReadOnlyStringProperty("lol");
+        let changed = new ReadOnlyStringProperty();
         changed.bind(property);
         assertEquals("lol", changed.value);
-        let left = new StringProperty("");
+        let left = new ReadOnlyStringProperty("");
         let concat = left.concat(changed);
         left.value = "Hello ";
         changed.value = "Concat";
@@ -35,7 +35,7 @@ class PropertyTest extends TestCase {
         assertTrue(matching.value);
         regex.value = /a/;
         assertFalse(matching.value);
-        let stringProperty = new StringProperty("A");
+        let stringProperty = new ReadOnlyStringProperty("A");
         let listener = new TestListener("B", "A");
         stringProperty.addListener(listener);
         stringProperty.value = "B";
@@ -76,7 +76,7 @@ class PropertyTest extends TestCase {
         assertTrue(lt.value);
         let or = gt.or(lt);
         assertTrue(or.value);
-        let booleanProperty = new BooleanProperty(true);
+        let booleanProperty = new ReadOnlyBooleanProperty(true);
         let listener = new TestListener(false, true);
         booleanProperty.addListener(listener);
         booleanProperty.value = false;

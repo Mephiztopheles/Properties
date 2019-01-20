@@ -1,13 +1,10 @@
-import Property from "../Property.js";
-export default class RegExProperty extends Property {
+import ReadOnlyRegExProperty from "./ReadOnlyRegExProperty.js";
+export default class RegExProperty extends ReadOnlyRegExProperty {
     get value() {
-        return this.$value;
+        return this.$get();
     }
     set value(value) {
-        if (value instanceof RegExp)
-            super.value = value;
-        else
-            super.value = new RegExp(value);
+        this.$set(value);
     }
 }
 //# sourceMappingURL=RegExProperty.js.map

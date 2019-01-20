@@ -1,5 +1,5 @@
-import Property from "./Property.js";
+import PropertyBase from "./PropertyBase.js";
 
 export default interface ChangeListener<T> {
-    changed( observable:Property<T>, newValue:T, oldValue:T ):void
+    changed ( observable: PropertyBase<T>, newValue: T, oldValue: T ): void
 }

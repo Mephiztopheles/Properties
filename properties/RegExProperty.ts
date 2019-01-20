@@ -1,16 +1,12 @@
-import Property from "../Property.js";
+import ReadOnlyRegExProperty from "./ReadOnlyRegExProperty.js";
 
-export default class RegExProperty extends Property<RegExp> {
+export default class RegExProperty extends ReadOnlyRegExProperty {
 
-    public get value() {
-        return this.$value;
+    public get value () {
+        return this.$get();
     }
 
-    public set value( value:any ) {
-
-        if ( value instanceof RegExp )
-            super.value = value;
-        else
-            super.value = new RegExp( value );
+    public set value ( value: any ) {
+        this.$set( value );
     }
 }

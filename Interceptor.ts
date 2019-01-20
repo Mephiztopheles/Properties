@@ -1,13 +1,13 @@
-import Property from "./Property.js";
+import PropertyBase from "./PropertyBase.js";
 
 export default abstract class Interceptor<T> {
 
     // noinspection TypeScriptAbstractClassConstructorCanBeMadeProtected
-    constructor( protected property:Property<any> ) {
+    constructor ( protected property: PropertyBase<any> ) {
 
         if ( this.property == null )
             throw new Error( "Cannot intercept with null" );
     }
 
-    abstract intercept( value:any ):any
+    abstract intercept ( value: T ): any
 }

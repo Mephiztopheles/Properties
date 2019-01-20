@@ -1,7 +1,13 @@
-import Property from "../Property.js";
 import Interceptor from "../Interceptor.js";
 import BooleanProperty, { ToBooleanInterceptor } from "./BooleanProperty.js";
-export default class StringProperty extends Property {
+import ReadOnlyProperty from "../ReadOnlyProperty.js";
+export default class ReadOnlyStringProperty extends ReadOnlyProperty {
+    get value() {
+        return this.$get();
+    }
+    set value(value) {
+        this.$set(value);
+    }
     concat(suffix) {
         return this.intercept(new ConcatenationInterceptor(suffix), suffix);
     }
@@ -30,4 +36,4 @@ class IsEmptyInterceptor extends ToBooleanInterceptor {
         return this.propertyToCheck.value == null || this.propertyToCheck.value == "";
     }
 }
-//# sourceMappingURL=StringProperty.js.map
+//# sourceMappingURL=ReadOnlyStringProperty.js.map

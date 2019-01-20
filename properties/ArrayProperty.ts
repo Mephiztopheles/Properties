@@ -26,7 +26,7 @@ function toJSON ( object ) {
 
 export default class ArrayProperty<T> extends Property<T[]> {
 
-    public constructor ( value?: T[], interceptor?: Interceptor<T> ) {
+    public constructor ( value?: T[], interceptor?: Interceptor<T[]> ) {
 
         if ( !Array.isArray( value ) )
             value = [];
@@ -34,20 +34,8 @@ export default class ArrayProperty<T> extends Property<T[]> {
         super( value, interceptor );
     }
 
-    public get ( index: number ): T | undefined {
-        return this.$value[ index ];
-    }
-
     public get value (): T[] {
-
-        if ( this.interceptor == null )
-            return this.$value;
-
-        return this.interceptor.intercept( this.$value );
-    }
-
-    public get length (): number {
-        return this.$value.length;
+        return this.$get();
     }
 
     public set value ( value: T[] ) {
@@ -62,6 +50,14 @@ export default class ArrayProperty<T> extends Property<T[]> {
 
             this.notify( value, oldValue );
         }
+    }
+
+    public get length (): number {
+        return this.$value.length;
+    }
+
+    public get ( index: number ): T | undefined {
+        return this.$value[ index ];
     }
 
     public push ( ...items: T[] ): number {

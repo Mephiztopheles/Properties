@@ -1,60 +1,28 @@
-import Property       from "../Property.js";
-import Interceptor    from "../Interceptor.js";
-import ChangeListener from "../ChangeListener.js";
+import ReadOnlyBooleanProperty from "./ReadOnlyBooleanProperty.js";
+import Property                from "../Property.js";
+import Interceptor             from "../Interceptor.js";
+import ChangeListener          from "../ChangeListener.js";
 
-export default class BooleanProperty extends Property<boolean> {
+export default class BooleanProperty extends ReadOnlyBooleanProperty {
 
-    static toBoolean ( assignment: Property<any>, interceptor: Interceptor<boolean>, property: Property<any> ):BooleanProperty {
+    public get value () {
+        return this.$get();
+    }
+
+    public set value ( value: boolean ) {
+        this.$set( value );
+    }
+
+    public static toBoolean ( assignment: Property<any>, interceptor: Interceptor<boolean>, property: Property<any> ): ReadOnlyBooleanProperty {
 
         const instance = new BooleanProperty( null, interceptor );
 
-        let toBooleanListener = new ToBooleanListener( <BooleanProperty>instance );
+        let toBooleanListener = new ToBooleanListener( <ReadOnlyBooleanProperty>instance );
         assignment.addListener( toBooleanListener );
         if ( property != null )
             property.addListener( toBooleanListener );
 
         return instance;
-    }
-
-    public and ( property: BooleanProperty ): BooleanProperty {
-        return this.intercept( new AndInterceptor( property ), property );
-    }
-
-    public or ( property: BooleanProperty ): BooleanProperty {
-        return this.intercept( new OrInterceptor( property ), property );
-    }
-
-    public not (): BooleanProperty {
-        return this.intercept( new NotInterceptor( this ), this );
-    }
-}
-
-export abstract class ToBooleanInterceptor<T> extends Interceptor<boolean> {
-
-    // noinspection TypeScriptAbstractClassConstructorCanBeMadeProtected
-    constructor ( protected propertyToCheck: Property<T>, property: Property<any> ) {
-        super( property );
-    }
-}
-
-class AndInterceptor extends Interceptor<boolean> {
-
-    intercept ( value: boolean ): boolean {
-        return value && this.property.value;
-    }
-}
-
-class OrInterceptor extends Interceptor<boolean> {
-
-    intercept ( value: boolean ): boolean {
-        return value || this.property.value;
-    }
-}
-
-class NotInterceptor extends Interceptor<boolean> {
-
-    intercept ( value: boolean ): boolean {
-        return !this.property.value;
     }
 }
 
@@ -62,7 +30,7 @@ class ToBooleanListener implements ChangeListener<any> {
 
     private value: boolean;
 
-    constructor ( private instance: BooleanProperty ) {
+    constructor ( private instance: ReadOnlyBooleanProperty ) {
         this.value = instance.value;
     }
 
@@ -74,5 +42,13 @@ class ToBooleanListener implements ChangeListener<any> {
             this.value = value;
             this.instance.notify( newValue, oldValue );
         }
+    }
+}
+
+export abstract class ToBooleanInterceptor<T> extends Interceptor<boolean> {
+
+    // noinspection TypeScriptAbstractClassConstructorCanBeMadeProtected
+    constructor ( protected propertyToCheck: Property<T>, property: Property<any> ) {
+        super( property );
     }
 }
