@@ -32,7 +32,7 @@ export default class PropertyBase<T> {
     }
 
     public set value ( value: T ) {
-        throw new Error( "Unsupported Operation" );
+        this.$set( value );
     }
 
     public bind ( property: PropertyBase<T> ): void {
@@ -68,11 +68,11 @@ export default class PropertyBase<T> {
             l.splice( index, 1 );
     }
 
-    changed ( observable: PropertyBase<T> ) {
+    public changed ( observable: PropertyBase<T> ) {
         this.value = observable.value;
     }
 
-    notify ( newValue: T, oldValue: T ) {
+    public notify ( newValue: T, oldValue: T ) {
 
         listeners.get( this ).forEach( listener => {
 
@@ -81,6 +81,28 @@ export default class PropertyBase<T> {
             else
                 ( <ChangeListener<T>>listener ).changed( this, newValue, oldValue );
         } );
+    }
+
+    public isNull (): PropertyBase<boolean> {
+
+        const instance = new PropertyBase<boolean>( this.value == null );
+
+        this.addListener( ( observable: PropertyBase<any>, newValue: any ) => {
+            instance.value = newValue == null;
+        } );
+
+        return instance;
+    }
+
+    public isNotNull (): PropertyBase<boolean> {
+
+        const instance = new PropertyBase<boolean>( this.value != null );
+
+        this.addListener( ( observable: PropertyBase<any>, newValue: any ) => {
+            instance.value = newValue != null;
+        } );
+
+        return instance;
     }
 
     protected $set ( value: T ) {

@@ -1,6 +1,6 @@
 {
     "name":            "@mephiztopheles/properties",
-    "version":         "1.4.0",
+    "version":         "1.5.0",
     "description":     "Java properties brought to javascript",
     "main":            "Property.ts",
     "directories":     {
