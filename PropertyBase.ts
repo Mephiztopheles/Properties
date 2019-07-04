@@ -1,5 +1,6 @@
 import Interceptor    from "./Interceptor.js";
 import ChangeListener from "./ChangeListener.js";
+import NotifyListener from "./NotifyListener.js";
 
 interface ChangeListenerLambda<T> {
     ( observable: PropertyBase<T>, newValue: T, oldValue: T ): void
@@ -136,12 +137,3 @@ export default class PropertyBase<T> {
     }
 }
 
-export class NotifyListener<T> implements ChangeListener<T> {
-
-    constructor ( private property: PropertyBase<T> ) {
-    }
-
-    changed ( observable: PropertyBase<T>, newValue: T, oldValue: T ) {
-        this.property.notify( newValue, oldValue );
-    }
-}
