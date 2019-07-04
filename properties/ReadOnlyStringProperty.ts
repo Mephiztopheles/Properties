@@ -7,14 +7,6 @@ import ReadOnlyProperty                          from "../ReadOnlyProperty.js";
 
 export default class ReadOnlyStringProperty extends ReadOnlyProperty<string> {
 
-    public get value (): string {
-        return this.$get();
-    }
-
-    public set value ( value: string ) {
-        this.$set( value );
-    }
-
     public concat ( suffix: Property<any> ): ReadOnlyStringProperty {
         return this.intercept( new ConcatenationInterceptor( suffix ), suffix );
     }

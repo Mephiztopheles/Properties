@@ -3,14 +3,6 @@ import ReadOnlyProperty from "../ReadOnlyProperty.js";
 
 export default class ReadOnlyBooleanProperty extends ReadOnlyProperty<boolean> {
 
-    public get value (): boolean {
-        return this.$get();
-    }
-
-    public set value ( value: boolean ) {
-        this.$set( value );
-    }
-
     public and ( property: ReadOnlyBooleanProperty ): ReadOnlyBooleanProperty {
         return this.intercept( new AndInterceptor( property ), property );
     }

@@ -65,11 +65,15 @@ export default class ArrayProperty<T> extends Property<T[]> {
         if ( items.length == 0 )
             return this.$value.length;
 
-        const oldValue = this.$value.slice();
+        return apply( this, "push", items );
+    }
 
-        let length = this.$value.push.apply( this.$value, items );
-        this.notify( this.$value, oldValue );
-        return length;
+    public unshift ( ...items: T[] ): number {
+
+        if ( items.length == 0 )
+            return this.$value.length;
+
+        return apply( this, "unshift", items );
     }
 
     public splice ( start: number, deleteCount?: number, ...items: T[] ): T[] {
@@ -126,4 +130,20 @@ export default class ArrayProperty<T> extends Property<T[]> {
 
         return element;
     }
+
+    public join ( separator?: string ): string {
+        return this.$value.join( separator );
+    }
+}
+
+function apply ( property: ArrayProperty<any>, method, value ) {
+
+    // @ts-ignore
+    const oldValue = property.$value.slice();
+
+    // @ts-ignore
+    let returnValue = property.$value[ method ].apply( property.$value, value );
+    // @ts-ignore
+    property.notify( property.$value, oldValue );
+    return returnValue;
 }

@@ -1,6 +1,6 @@
 {
     "name": "@mephiztopheles/properties",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "description": "Java properties brought to javascript",
     "main": "Property.ts",
     "directories": {
@@ -26,6 +26,5 @@
     "bugs": {
         "url": "https://github.com/Mephiztopheles/Properties/issues"
     },
-    "homepage": "https://github.com/Mephiztopheles/Properties#readme",
-    "types": "index.d.ts"
+    "homepage": "https://github.com/Mephiztopheles/Properties#readme"
 }

@@ -3,7 +3,7 @@ import ChangeListener from "./ChangeListener.js";
 import NotifyListener from "./NotifyListener.js";
 
 interface ChangeListenerLambda<T> {
-    ( observable: PropertyBase<T>, newValue: T, oldValue: T ): void
+    ( newValue: T, oldValue: T, observable: PropertyBase<T> ): void
 }
 
 let id          = 0;
@@ -69,26 +69,28 @@ export default class PropertyBase<T> {
             l.splice( index, 1 );
     }
 
-    public changed ( observable: PropertyBase<T> ) {
+    changed ( newValue: T, oldValue: T, observable: PropertyBase<T> ) {
         this.value = observable.value;
     }
 
-    public notify ( newValue: T, oldValue: T ) {
+    notify ( newValue: T, oldValue: T ) {
 
         listeners.get( this ).forEach( listener => {
 
             if ( typeof listener === "function" )
                 listener( this, newValue, oldValue );
             else
-                ( <ChangeListener<T>>listener ).changed( this, newValue, oldValue );
+                ( <ChangeListener<T>>listener ).changed( newValue, oldValue, this );
         } );
     }
 
+
     public isNull (): PropertyBase<boolean> {
+
 
         const instance = new PropertyBase<boolean>( this.value == null );
 
-        this.addListener( ( observable: PropertyBase<any>, newValue: any ) => {
+        this.addListener( ( newValue: any ) => {
             instance.value = newValue == null;
         } );
 
@@ -99,7 +101,7 @@ export default class PropertyBase<T> {
 
         const instance = new PropertyBase<boolean>( this.value != null );
 
-        this.addListener( ( observable: PropertyBase<any>, newValue: any ) => {
+        this.addListener( ( newValue: any ) => {
             instance.value = newValue != null;
         } );
 
@@ -136,4 +138,3 @@ export default class PropertyBase<T> {
         return instance;
     }
 }
-

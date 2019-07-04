@@ -2,19 +2,10 @@ import NumberProperty                            from "./NumberProperty.js";
 import ReadOnlyBooleanProperty                   from "./BooleanProperty.js";
 import BooleanProperty, { ToBooleanInterceptor } from "./BooleanProperty.js";
 import StringProperty                            from "./StringProperty.js";
-import Property                                  from "../Property.js";
 import Interceptor                               from "../Interceptor.js";
-import PropertyBase                              from "../PropertyBase.js";
+import ReadOnlyProperty                          from "../ReadOnlyProperty.js";
 
-export default class ReadOnlyNumberProperty extends Property<number> {
-
-    public get value (): number {
-        return this.$get();
-    }
-
-    public set value ( value: number ) {
-        this.$set( value );
-    }
+export default class ReadOnlyNumberProperty extends ReadOnlyProperty<number> {
 
     public divide ( property: NumberProperty ): NumberProperty {
         return this.intercept( new DivideInterceptor( property ), property );
@@ -46,7 +37,7 @@ export default class ReadOnlyNumberProperty extends Property<number> {
 
         const instance = new StringProperty( value );
 
-        this.addListener( ( observable: PropertyBase<number>, newValue: number ) => {
+        this.addListener( ( newValue: number ) => {
 
             if ( newValue != null )
                 return newValue.toString();

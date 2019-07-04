@@ -1,12 +1,5 @@
-import Property from "../Property.js";
+import ReadOnlyProperty from "../ReadOnlyProperty.js";
 
-export default class ReadOnlyRegExProperty extends Property<RegExp> {
+export default class ReadOnlyRegExProperty extends ReadOnlyProperty<RegExp> {
 
-    public get value (): RegExp {
-        return this.$get();
-    }
-
-    public set value ( value: RegExp ) {
-        this.$set( value );
-    }
 }
