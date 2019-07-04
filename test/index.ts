@@ -1,10 +1,10 @@
-import ReadOnlyStringProperty                                    from "../properties/StringProperty.js";
-import NumberProperty                                            from "../properties/NumberProperty.js";
-import RegExProperty                                             from "../properties/RegExProperty.js";
+import ReadOnlyStringProperty                                    from "../src/properties/StringProperty.js";
+import NumberProperty                                            from "../src/properties/NumberProperty.js";
+import RegExProperty                                             from "../src/properties/RegExProperty.js";
 import TestCase, { assertEquals, assertFalse, assertTrue, test } from "../node_modules/@mephiztopheles/test/TestCase.js";
-import ChangeListener                                            from "../ChangeListener.js";
-import Property                                                  from "../Property.js";
-import ReadOnlyBooleanProperty                                   from "../properties/BooleanProperty.js";
+import ChangeListener                                            from "../src/ChangeListener.js";
+import Property                                                  from "../src/Property.js";
+import ReadOnlyBooleanProperty                                   from "../src/properties/BooleanProperty.js";
 
 
 class TestListener implements ChangeListener<any> {

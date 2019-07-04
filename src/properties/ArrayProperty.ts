@@ -1,5 +1,5 @@
 import Property    from "../Property.js";
-import Interceptor from "Interceptor.js";
+import Interceptor from "../Interceptor.js";
 
 
 function toJSON ( object ) {
