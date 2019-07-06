@@ -1,8 +1,8 @@
 {
   "name": "@mephiztopheles/properties",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Java properties brought to javascript",
-  "main": "src/Property.ts",
+  "main": "Property.ts",
   "directories": {
     "test": "test"
   },
@@ -21,7 +21,6 @@
     "properties",
     "mephiztopheles"
   ],
-  "man": "src/index.d.ts",
   "author": "xandrios93",
   "license": "ISC",
   "bugs": {

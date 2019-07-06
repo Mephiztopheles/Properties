@@ -1,5 +1,5 @@
 import Property from "../Property.js";
-import Interceptor from "src/Interceptor.js";
+import Interceptor from "Interceptor.js";
 export default class ArrayProperty<T> extends Property<T[]> {
     constructor(value?: T[], interceptor?: Interceptor<T[]>);
     value: T[];
